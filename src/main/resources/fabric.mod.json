@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "race-evolution-mod",
+	"version": "${version}",
+	"name": "Race Evolution",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/race-evolution-mod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.raev.RaceEvolution"
+		],
+		"client": [
+			"com.raev.RaceEvolutionClient"
+		]
+	},
+	"mixins": [
+		"race-evolution-mod.mixins.json",
+		{
+			"config": "race-evolution-mod.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
