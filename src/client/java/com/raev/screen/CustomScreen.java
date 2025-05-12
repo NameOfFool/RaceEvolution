@@ -1,10 +1,12 @@
 package com.raev.screen;
 
 
+import com.raev.RaceEvolution;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 
 public class CustomScreen extends Screen {
@@ -13,6 +15,8 @@ public class CustomScreen extends Screen {
         //super используется для того, чтобы обратиться к родителю(Screen) и проделать действия, прописанные в его конструкторе
         super(title);
     }
+
+
 
     //Вызывается при инициализации
     @Override
@@ -42,5 +46,8 @@ public class CustomScreen extends Screen {
                 40 - this.textRenderer.fontHeight - 10,
                 0xFFFFFF,
                 true);
+        context.drawTexture(Identifier.of(RaceEvolution.MOD_ID, "textures/gui/choose_origin.png"),
+                0, 0, this.width, this.height, 0, 0, 16, 16, 16, 16);
+
     }
 }

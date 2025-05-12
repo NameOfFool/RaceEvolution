@@ -1,22 +1,25 @@
 package com.raev;
 
-import com.raev.screen.CustomScreen;
+import com.raev.networking.payload.SelectRaceC2SPayload;
+import com.raev.networking.payload.ShowSelectRaceScreenS2CPayload;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+
 
 public class RaceEvolutionClient implements ClientModInitializer {
 
-	private boolean hasTriggered = false;
-	@Override
-	public void onInitializeClient() {
-		ClientTickEvents.END_CLIENT_TICK.register(client ->{
-			if (client.player != null && !hasTriggered) {
-				client.setScreen(new CustomScreen(Text.empty()));
-				hasTriggered = true;
-			}
-		});
-	}
+
+    @Override
+    public void onInitializeClient() {
+
+
+        ClientPlayNetworking
+                .registerGlobalReceiver(ShowSelectRaceScreenS2CPayload.ID,
+                        (payload, context) -> {
+                            SelectRaceC2SPayload response = new SelectRaceC2SPayload(payload.raceList().getFirst().getId());
+			                ClientPlayNetworking.send(response);
+                        });
+
+    }
 }
