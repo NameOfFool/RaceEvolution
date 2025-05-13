@@ -1,5 +1,7 @@
 package com.raev.race;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextCodecs;
 
 @Getter
 @Setter
@@ -37,7 +40,11 @@ public class Race {
             PacketCodecs.STRING.encode(buf, value.getDescription().getString());
         }
     };
-
+    public static Codec<Race> CODEC = RecordCodecBuilder.create(instance ->instance.group(
+            Codec.INT.fieldOf("id").forGetter(Race::getId),
+            Codec.STRING.fieldOf("title").forGetter(Race::getTitle),
+            TextCodecs.CODEC.fieldOf("description").forGetter(Race::getDescription)
+    ).apply(instance, Race::new));
 
     private Integer id;
     private String title;

@@ -7,7 +7,5 @@ import net.minecraft.util.Identifier;
 
 public class ModAttachments {
     public static final AttachmentType<Race> RACE =
-            AttachmentRegistry.create(Identifier.of(RaceEvolution.MOD_ID, "race"));
-
-
+            AttachmentRegistry.createPersistent(Identifier.of(RaceEvolution.MOD_ID, "race"), Race.CODEC);
 }

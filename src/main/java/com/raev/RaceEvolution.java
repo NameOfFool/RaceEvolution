@@ -7,6 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,21 +22,22 @@ public class RaceEvolution implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		races.add(new Race(1, "Human", Text.of("Only Human")));
+		races.add(new Race(0, "Human", Text.of("Only Human")));
 
 		PayloadTypeRegistry.playS2C().register(ShowSelectRaceScreenS2CPayload.ID, ShowSelectRaceScreenS2CPayload.CODEC);
 		PayloadTypeRegistry.playC2S().register(SelectRaceC2SPayload.ID, SelectRaceC2SPayload.CODEC);
 
-		ServerPlayConnectionEvents.INIT.register((handler, server)->{
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server)->{
 			Race race = handler.player.getAttached(ModAttachments.RACE);
 			if(race == null){
 				ShowSelectRaceScreenS2CPayload payload = new ShowSelectRaceScreenS2CPayload(races);
-				ServerPlayNetworking.send(handler.player, payload);
+				sender.sendPacket(payload);
 			}
 		});
 
 		ServerPlayNetworking.registerGlobalReceiver(SelectRaceC2SPayload.ID, ((payload, context) -> {
 			Race selectedRace = races.get(payload.raceId());
+			context.player().setAttached(ModAttachments.RACE, selectedRace);
 		}));
 	}
 }
